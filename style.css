@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+html, body, [data-testid="stAppViewContainer"] {
+    font-family: 'Inter', sans-serif;
+    background-color: #0d0f1d !important;
+    color: #f1f5f9;
+}
+
+/* Background Ornament System */
+.header-dots-left {
+    position: absolute; top: 20px; left: 30px; width: 40px; height: 40px;
+    background-image: radial-gradient(#334155 2px, transparent 2.5px); background-size: 8px 8px; opacity: 0.5;
+}
+.header-dots-right {
+    position: absolute; top: 20px; right: 30px; width: 40px; height: 40px;
+    background-image: radial-gradient(#334155 2px, transparent 2.5px); background-size: 8px 8px; opacity: 0.5;
+}
+
+/* Title Engine */
+.main-title {
+    font-size: 2.6rem; font-weight: 700; text-align: center; margin-top: 10px; margin-bottom: 8px;
+    background: linear-gradient(90deg, #ffffff, #818cf8, #34d399);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.sub-title { font-size: 0.95rem; color: #64748b; text-align: center; margin-bottom: 30px; }
+
+/* Dashboard Structural Grid Cards with Premium Shadows and Spacing */
+.dashboard-card { 
+    background: #131629; 
+    border: 1px solid #1e293b; 
+    border-radius: 14px; 
+    padding: 22px; 
+    margin-bottom: 16px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    transition: box-shadow 0.3s ease-in-out;
+}
+.dashboard-card:hover {
+    box-shadow: 0 12px 35px rgba(99, 102, 241, 0.08);
+}
+
+.section-header {
+    font-size: 1rem; font-weight: 600; color: #ffffff; margin-bottom: 15px;
+    border-bottom: 1px solid #1e293b; padding-bottom: 8px;
+}
+
+/* Action Button */
+button[data-testid="stBaseButton-secondary"] {
+    background: linear-gradient(90deg, #4f46e5 0%, #06b6d4 100%) !important;
+    border: none !important; color: white !important; font-weight: 600 !important;
+    padding: 10px 24px !important; border-radius: 8px !important;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3) !important;
+}
+
+/* Row 2: Unified Deep Grid Cards Structure (Equal Heights Maintained) */
+.nested-insight-card {
+    background: #171b36; border: 1px solid #232a54; border-radius: 12px;
+    padding: 18px; height: 320px; display: flex; flex-direction: column;
+    box-sizing: border-box; transition: transform 0.25s, border-color 0.25s;
+}
+.nested-insight-card:hover {
+    transform: translateY(-4px); border-color: #4f46e5;
+    box-shadow: 0 12px 24px rgba(79, 70, 229, 0.15);
+}
+.card-heading {
+    margin: 0 0 12px 0; font-size: 1.1rem; font-weight: 700;
+    padding-bottom: 10px; border-bottom: 1px solid #232a54; flex-shrink: 0;
+}
+.strength { color: #10b981; }
+.weakness { color: #f59e0b; }
+.suggestion { color: #3b82f6; }
+
+/* Scroll Systems inside Cards */
+.card-content-scroll {
+    overflow-y: auto; flex-grow: 1; padding-right: 4px;
+}
+.card-content-scroll::-webkit-scrollbar, .text-preview-window::-webkit-scrollbar {
+    width: 5px;
+}
+.card-content-scroll::-webkit-scrollbar-thumb, .text-preview-window::-webkit-scrollbar-thumb {
+    background: #232a54; border-radius: 10px;
+}
+
+.bullet-insight-item {
+    color: #cbd5e1; line-height: 1.6; font-size: 0.88rem; margin-bottom: 10px;
+}
+
+/* Premium Blueprint Verdict Box */
+.verdict-box-premium {
+    background: linear-gradient(135deg, #16143c 0%, #12102e 100%) !important;
+    border: 1px dashed #4f46e5 !important;
+}
+.verdict-highlight-status {
+    font-size: 1.05rem; font-weight: 600; color: #34d399;
+    line-height: 1.5; margin-top: 10px; overflow-y: auto; flex-grow: 1;
+}
+
+/* Metric Gauges */
+.gauge-status-label { text-align: center; font-size: 1.3rem; font-weight: 700; margin-top: -5px; }
+.compatibility-badge {
+    background: rgba(16, 185, 129, 0.08); color: #10b981; border: 1px solid rgba(16,185,129,0.15);
+    border-radius: 20px; font-size: 0.75rem; width: fit-content; margin: 8px auto 0 auto; padding: 3px 12px;
+}
+
+/* Skill Pill Badges System */
+.skills-subheading-matched { color: #2ec4b6; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; }
+.skills-subheading-missing { color: #f43f5e; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; }
+.tag-container { display: flex; flex-wrap: wrap; gap: 6px; content-visibility: auto; }
+.skill-tag { padding: 5px 14px; border-radius: 50px; font-size: 0.75rem; font-weight: 500; } /* Curved 50px Pills */
+.match-tag { background: rgba(46, 196, 182, 0.06); color: #2ec4b6; border: 1px solid rgba(46, 196, 182, 0.25); }
+.miss-tag { background: rgba(244, 63, 94, 0.06); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.25); }
+
+/* Progress Wrappers */
+.progress-wrapper { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; border-top: 1px solid #1e293b; padding-top: 12px; }
+.progress-bar-bg { background: #1e293b; height: 6px; border-radius: 4px; flex-grow: 1; margin: 0 12px; overflow: hidden; }
+.progress-bar-fill { background: #10b981; height: 100%; }
+
+/* Code Snippet / Resume Scrollable Preview Container */
+.text-preview-window {
+    background: #090b14; 
+    border: 1px solid #232a54; 
+    border-radius: 10px;
+    height: 320px; /* Aligned height to prevent structural breaking */
+    overflow-y: auto; 
+    white-space: pre-wrap; 
+    padding: 18px; 
+    font-size: 0.9rem; 
+    color: #cbd5e1;
+    line-height: 1.8;
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+}
+
+/* Custom Scrollbar Styles for the Preview Window */
+.text-preview-window::-webkit-scrollbar {
+    width: 6px;
+}
+.text-preview-window::-webkit-scrollbar-track {
+    background: #090b14;
+    border-radius: 10px;
+}
+.text-preview-window::-webkit-scrollbar-thumb {
+    background: #232a54; 
+    border-radius: 10px;
+}
+.text-preview-window::-webkit-scrollbar-thumb:hover {
+    background: #4f46e5; 
+}
+
+/* Inline Badges inside Text Stream */
+.inline-match { 
+    background: rgba(46, 196, 182, 0.18); 
+    color: #2ec4b6; 
+    padding: 2px 6px; 
+    border-radius: 4px; 
+    font-weight: 600;
+    border: 1px solid rgba(46, 196, 182, 0.3);
+}
+.inline-miss { 
+    background: rgba(244, 63, 94, 0.18); 
+    color: #f43f5e; 
+    padding: 2px 6px; 
+    border-radius: 4px; 
+    font-weight: 600;
+    border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+/* Overall Layout Responsiveness Rules */
+@media (max-width: 1024px) {
+    .nested-insight-card { height: auto; min-height: 280px; }
+    .main-title { font-size: 2.1rem; }
+    .text-preview-window { height: 260px; }
+}

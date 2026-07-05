@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.venv/
+venv/
+
+# Streamlit
+.streamlit/
+
+# VS Code
+.vscode/
+
+# Generated Reports
+resume_report.pdf
+
+# OS
+.DS_Store
+Thumbs.db
