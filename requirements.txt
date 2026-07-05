@@ -1,5 +1,9 @@
 streamlit
-PyMuPDF
-scikit-learn
+plotly
+pymupdf
+google-genai
 python-dotenv
-google-generativeai
+reportlab
+scikit-learn
+pandas
+numpy
