@@ -30,7 +30,9 @@ Rules:
 4. Strengths must come ONLY from resume.
 5. Weaknesses must come ONLY from missing skills.
 6. Suggestions must directly improve missing skills.
-7. Final verdict must depend on ATS score.
+7. Do NOT generate any ATS score.
+8. Do NOT generate any final verdict.
+9. Only provide strengths, weaknesses and suggestions.
 
 Scoring:
 
@@ -77,11 +79,11 @@ Return JSON only.
                             "strengths": {"type": "ARRAY", "items": {"type": "STRING"}},
                             "weaknesses": {"type": "ARRAY", "items": {"type": "STRING"}},
                             "suggestions": {"type": "ARRAY", "items": {"type": "STRING"}},
-                            "final_verdict": {"type": "STRING"}
+                            
                         },
                         "required": [
                             "ats_score", "resume_skills", "job_skills", "matched_skills", 
-                            "missing_skills", "strengths", "weaknesses", "suggestions", "final_verdict"
+                            "missing_skills", "strengths", "weaknesses", "suggestions"
                         ]
                     }
                 )
@@ -102,7 +104,7 @@ Return JSON only.
             
             # If all retries fail or it's a quota error on the final attempt
             if "429" in error or "RESOURCE_EXHAUSTED" in error:
-                return {"status": "quota_exceeded", "final_verdict": "Quota exceeded after retries."}
+                return {"status": "quota_exceeded", "message": "Quota exceeded after retries."}
             
             # General system error handling
             return {
@@ -114,6 +116,6 @@ Return JSON only.
     "missing_skills":[],
     "strengths":[],
     "weaknesses":[],
-    "suggestions":[],
-    "final_verdict":error
+    "suggestions":[]
+    
 }

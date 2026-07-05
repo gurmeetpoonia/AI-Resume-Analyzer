@@ -3,7 +3,6 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
 from reportlab.lib.units import inch
 from datetime import datetime
-import streamlit as st 
 def generate_pdf_report(
     filename,
     ats_score,
@@ -185,4 +184,9 @@ def generate_pdf_report(
         )
     )
 
-    doc.build(story)
+    try:
+        doc.build(story)
+        return True
+    except Exception as e:
+        print(e)
+        return False

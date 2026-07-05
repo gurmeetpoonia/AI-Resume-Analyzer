@@ -1,9 +1,12 @@
 import streamlit as st
 import plotly.graph_objects as go
+import os
 import json
 from Analyzer import extract_text_from_pdf 
 from ai_feedback import analyze_resume
 from report_generator import generate_pdf_report
+from ats_score import calculate_ats_score
+
 
 # Page configuration 
 st.set_page_config(
@@ -31,7 +34,7 @@ if "analysis_done" not in st.session_state:
     st.session_state.missing_skills = []
     st.session_state.result = {}
     st.session_state.resume_text = ""
-
+    st.session_state.final_verdict = "" 
 # Top Dot Design Layout element
 st.markdown('<div class="header-dots-left"></div><div class="header-dots-right"></div>', unsafe_allow_html=True)
 
@@ -83,16 +86,43 @@ if analyze:
         result = analyze_resume(resume_text, job_description)
 
         if result["status"] != "success":
-            st.error(result["final_verdict"])
+            st.error(result.get("message","Unknown Error"))
             st.stop()
 
         st.session_state.analysis_done = True
         st.session_state.resume_text = resume_text
         st.session_state.result = result
-        st.session_state.ats_score = result["ats_score"]
+        st.session_state.ats_score = calculate_ats_score( resume_text, result["job_skills"],result["matched_skills"]) 
         st.session_state.matched_skills = result["matched_skills"]
         st.session_state.missing_skills = result["missing_skills"]
 
+        
+        score = st.session_state.ats_score
+
+        if score >= 90:
+            st.session_state.final_verdict = (
+        "🌟 Excellent Match – Your resume is highly optimized for this role and is likely to perform very well in ATS screening."
+    )
+
+        elif score >= 75:
+            st.session_state.final_verdict = (
+        "✅ Good Match – Your resume aligns well with the job description. A few improvements can further strengthen your profile."
+    )
+
+        elif score >= 60:
+            st.session_state.final_verdict = (
+        "🟡 Average Match – Your resume meets several requirements but is missing some important skills and keywords."
+    )
+
+        elif score >= 40:
+            st.session_state.final_verdict = (
+        "🟠 Weak Match – Your resume requires significant improvements to better align with the target job."
+    )
+
+        else:
+            st.session_state.final_verdict = (
+        "🔴 Poor Match – Your resume has low alignment with the job description. Add relevant skills, projects, and experience."
+    )
 
 if st.session_state.analysis_done:
     ats_score = st.session_state.ats_score
@@ -133,8 +163,8 @@ if st.session_state.analysis_done:
 
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
         
-        match_status = "Excellent Match" if ats_score >= 75 else "Good Match" if ats_score >= 50 else "Low Compatibility"
-        status_color = "#10b981" if ats_score >= 75 else "#f59e0b" if ats_score >= 50 else "#ef4444"
+        match_status = "Excellent Match" if ats_score >= 90 else "Good Match" if ats_score >= 75 else "Average Match" if ats_score >= 60 else "Low Compatibility"
+        status_color = "#10b981" if ats_score >= 90 else "#47B550" if ats_score >= 75 else "#cdef44" if ats_score>=60 else "#ef4444"
         st.markdown(f'<div class="gauge-status-label" style="color: {status_color};">{match_status}</div>', unsafe_allow_html=True)
         st.markdown('<div class="compatibility-badge">✓ Strong ATS Compatibility</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
@@ -205,7 +235,7 @@ if st.session_state.analysis_done:
         """, unsafe_allow_html=True)
 
     with col_verdict:
-        verdict_text = result.get('final_verdict', 'Profile Evaluated')
+        verdict_text = st.session_state.final_verdict
         st.markdown(f"""
             <div class="nested-insight-card verdict-box-premium">
                 <span style="font-size:0.8rem; color:#a5b4fc; text-transform:uppercase; letter-spacing:1px; font-weight:600;">🛡️ Final Verdict</span>
@@ -217,6 +247,28 @@ if st.session_state.analysis_done:
         """, unsafe_allow_html=True)
         
     st.markdown('</div>', unsafe_allow_html=True)
+
+    ai_feedback = f"""
+Strengths:
+{chr(10).join(result["strengths"])}
+
+Weaknesses:
+{chr(10).join(result["weaknesses"])}
+
+Suggestions:
+{chr(10).join(result["suggestions"])}
+
+Final Verdict:
+{st.session_state.final_verdict}
+"""
+
+    generate_pdf_report(
+    filename="resume_report.pdf",
+    ats_score=round(ats_score),
+    matched_skills=matched_skills,
+    missing_skills=missing_skills,
+    ai_feedback=ai_feedback
+)
 
     # ================= HIGHLIGHTED PREVIEW & DOWNLOAD REPORT =================
     preview_col, download_col = st.columns([1.8, 1], gap="medium")
@@ -243,15 +295,16 @@ if st.session_state.analysis_done:
         st.markdown('<p class="section-header">📥 Download Executive Report</p>', unsafe_allow_html=True)
         st.markdown('<p style="font-size:0.85rem; color:#8da2bb; margin-bottom:20px;">Get a comprehensive layout ecosystem PDF structure compiled with strategic keyword indicators.</p>', unsafe_allow_html=True)
         
-        try:
+        
+
+        if os.path.exists("resume_report.pdf"):
             with open("resume_report.pdf", "rb") as pdf_file:
                 st.download_button(
-                    label="📥 Download PDF Report",
-                    data=pdf_file,
-                    file_name="AI_Resume_Report.pdf",
-                    mime="application/pdf",
-                    use_container_width=True
-                )
-        except FileNotFoundError:
-            st.info("ℹ️ Running simulation mode. Live report compile requires local file handle setup.")
-        st.markdown('</div>', unsafe_allow_html=True)
+            "📥 Download Executive Report",
+            data=pdf_file,
+            file_name="AI_Resume_Report.pdf",
+            mime="application/pdf",
+            use_container_width=True,
+        )
+        else:
+            st.error("❌ PDF report could not be generated.")
