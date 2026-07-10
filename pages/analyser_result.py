@@ -204,19 +204,34 @@ def show_analysis_result():
                 st.markdown('<p class="section-header">📊 Generated Report Preview</p>', unsafe_allow_html=True)
                 
                 if os.path.exists("resume_report.pdf"):
-                    import base64
-                    with open("resume_report.pdf", "rb") as f:
-                        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+                    try:
+                        import fitz  # PyMuPDF
+                        import base64
+
+                        # PDF open karke pehla page extract kiya
+                        doc = fitz.open("resume_report.pdf")
+                        page = doc.load_page(0)  # Pehla page
+                        pix = page.get_pixmap(dpi=150)  # High quality image conversion
+                        img_data = pix.tobytes("png")
+                        
+                        # Image bytes ko base64 me convert kiya display ke liye
+                        base64_img = base64.b64encode(img_data).decode('utf-8')
+                        
+                        # Preview wrapper me HTML img render ki, seamless and unblockable!
+                        pdf_display = f'''
+                            <div class="pdf-preview-container" style="height:300px; overflow-y:auto; text-align:center;">
+                                <img src="data:image/png;base64,{base64_img}" style="width:100%; border-radius:6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                            </div>
+                        '''
+                        st.markdown(pdf_display, unsafe_allow_html=True)
+                        doc.close()
+                    except Exception as e:
+                        # Fallback case agar library me koi issue aaye
+                        st.info("📄 PDF ready for download.")
+
+                    st.write("") # Spacing bracket
                     
-                    # FIX: iframe ko hata kar <embed> tag lagaya hai
-                    pdf_display = f'''
-                        <div class="pdf-preview-container">
-                            <embed src="data:application/pdf;base64,{base64_pdf}" width="100%" height="300px" type="application/pdf">
-                        </div>
-                    '''
-                    st.markdown(pdf_display, unsafe_allow_html=True)
-                    st.write("") 
-                    
+                    # Niche as-is Executive Download Button
                     with open("resume_report.pdf", "rb") as pdf_file:
                         st.download_button(
                             label="📥 Download Executive Report PDF",
@@ -229,6 +244,3 @@ def show_analysis_result():
                     st.error("❌ PDF report could not be generated for preview.")
                     
                 st.markdown('</div>', unsafe_allow_html=True)
-                    
-               
-            
