@@ -29,24 +29,9 @@ An AI-powered Resume Analyzer that evaluates resumes against job descriptions us
 
 ## 🖥️ Demo
 
-```
-https://ai-resume-analyzer-rcb.streamlit.app/
-```
+https://ai-career-assistant-rcb.streamlit.app/
 
 ---
----
-
-## 📸 Screenshots
-
-### Dashboard
-
-![Dashboard](assets/dashboard.png)
-
-### AI Resume Analyzer
-
-![AI Resume Analyzer](assets/ats_score.png)
-
-![AI Resume Analyzer](assets/ai_sta.png)
 
 
 ## 🛠️ Tech Stack
